@@ -1,0 +1,124 @@
+
+
+/* Base style for .zone */
+.zone {
+    padding: 30px 50px;
+    cursor: pointer;
+    display: inline-block;
+    color: #FFF;
+    font-size: 2em;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+    transition: all 0.3s ease;
+}
+
+.zone:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8), inset 0 -10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Button gradients */
+.gradient-bg {
+    background-image: linear-gradient(to bottom, #56B870, #a5c956);
+}
+
+.red-bg {
+    background-image: linear-gradient(to bottom, #C655BE, #cf0404);
+}
+
+.yellow-bg {
+    background-image: linear-gradient(to bottom, #F3AAAA, #febf04);
+}
+
+.blue-bg {
+    background-image: linear-gradient(to bottom, #7abcff, #4096ee);
+}
+
+/* Modern gradient for different button backgrounds */
+.zone.green { 
+    background-image: var(--green-gradient);
+}
+
+.zone.red { 
+    background-image: var(--red-gradient);
+}
+
+.zone.yellow { 
+    background-image: var(--yellow-gradient);
+}
+
+.zone.blue { 
+    background-image: var(--blue-gradient);
+}
+
+/* Define gradient variables */
+:root {
+    --green-gradient: linear-gradient(to bottom, #56B870, #a5c956);
+    --red-gradient: linear-gradient(to bottom, #C655BE, #cf0404);
+    --yellow-gradient: linear-gradient(to bottom, #F3AAAA, #febf04);
+    --blue-gradient: linear-gradient(to bottom, #7abcff, #4096ee);
+}
+
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: large;
+
+    
+}
+
+.nav-menu{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-menu > div{
+    padding: 0px 5px;
+}
+
+
+.red {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10rem;
+
+}
+
+.blue{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0px;
+
+    
+}
+
+.mini-zone{
+    background-color: darkslategrey;
+    text-align: center;
+    padding: 7rem;
+}
+
+.yellow{
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: medium;
+}
