@@ -75,5 +75,5 @@ const bonus = array.map((item, index) => {
 
 console.log(bonus)
 
-
+console.log(this);
 
