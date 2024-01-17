@@ -28,11 +28,14 @@ let andrei_pokemon = {
         species: 'Mouse Pokemon',
         height: 0.8,
         weight: 30,
-        power: ''
+        power: null
     }
 }
 
-if (andrei_pokemon && andrei_pokemon.raichu && will_pokemon 
+
+
+
+if (andrei_pokemon && andrei_pokemon.raichu && andrei_pokemon.raichu.power && will_pokemon 
     && will_pokemon.pikachu && will_pokemon.pikachu.friend 
     && will_pokemon.pikachu.friend.charizard) {
         console.log('fight!')
@@ -40,10 +43,19 @@ if (andrei_pokemon && andrei_pokemon.raichu && will_pokemon
         console.log('walk away...')
     }
 
+console.log(andrei_pokemon?.raichu?.power && will_pokemon?.pikachu?.friend?.charizard ? "fight!" : "walk away...");
+  
 
-// Exercise 4: What do these each output?
+
+
+// Exercise 4: What do these each give as output?
 console.log(false ?? 'hellooo')
+// false
 console.log(null ?? 'hellooo')
+// helloooo
 console.log(null || 'hellooo')
+// hellooo
 console.log((false || null) ?? 'hellooo')
+// hellooo
 console.log(null ?? (false || 'hellooo'))
+// hellooo
