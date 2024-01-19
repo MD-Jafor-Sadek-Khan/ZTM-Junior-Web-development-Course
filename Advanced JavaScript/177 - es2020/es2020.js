@@ -59,3 +59,11 @@ console.log((false || null) ?? 'hellooo')
 // hellooo
 console.log(null ?? (false || 'hellooo'))
 // hellooo
+
+const obj = {
+    kala:{
+        dhola:{
+            
+        }
+    }
+}
