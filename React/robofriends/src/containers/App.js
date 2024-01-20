@@ -37,6 +37,7 @@ export class App extends React.Component {
         <Scroll>
           <CardsList users={searchArray} />
         </Scroll>
+        <div></div>
       </div>
     )
   }
