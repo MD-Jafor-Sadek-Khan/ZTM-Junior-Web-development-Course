@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;900&display=swap');
+
+.app-name{
+    font-family: 'Roboto Slab', serif;
+    font-weight: 900;
+}
+
+.parent-relative{
+    position: relative;
+}
+
+.child-absolute{
+    position: absolute;
+    top: 0.05%;
+}
