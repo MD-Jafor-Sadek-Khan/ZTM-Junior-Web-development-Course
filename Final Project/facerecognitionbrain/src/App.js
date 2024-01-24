@@ -17,11 +17,6 @@ export class App extends React.Component {
     }
   }
 
-
-  componentDidMount(){
-
-  }
-
   inputOnChangeHandler = (event) => {
     this.setState({ input: event.target.value })
   }
@@ -59,8 +54,6 @@ export class App extends React.Component {
       body: raw,
     }
 
-    const boxsArray = []
-
     fetch(
       "https://api.clarifai.com/v2/models/" +
         MODEL_ID +
@@ -72,27 +65,28 @@ export class App extends React.Component {
       .then((response) => response.json())
       .then((result) => {
         const regions = result.outputs[0].data.regions
-        regions.forEach((region) => {
+        const boxsArray = regions.map((region) => {
           const boundingBox = region.region_info.bounding_box
-          const topRow = boundingBox.top_row.toFixed(3)
-          const leftCol = boundingBox.left_col.toFixed(3)
-          const bottomRow = boundingBox.bottom_row.toFixed(3)
-          const rightCol = boundingBox.right_col.toFixed(3)
+          const topRow = boundingBox.top_row
+          const leftCol = boundingBox.left_col
+          const bottomRow = boundingBox.bottom_row
+          const rightCol = boundingBox.right_col
 
           const data = { topRow, leftCol, bottomRow, rightCol }
-          boxsArray.push(data)
+          return data
         })
+        const faceBoxsData = this.calculateFaceBoxs(boxsArray)
+        this.setState({ boxs: faceBoxsData })
       })
       .catch((error) => console.log("error", error))
-    return boxsArray
-  }
 
+
+  }
 
   calculateFaceBoxs = (boxs) => {
     const img = document.getElementById("detection-image")
     const width = Number(img?.width)
     const height = Number(img?.height)
-    console.log("yoooo",height, width);
     const boxsArray = []
 
     boxs.forEach((box, index) => {
@@ -126,17 +120,14 @@ export class App extends React.Component {
   }
 
   clickButtonHandler = (event) => {
-
-    const newArr = this.clarifyApiCaller(this.state.input)
-
     this.setState({
       imgUrl: this.state.input,
-      boxs: this.calculateFaceBoxs(newArr),
+      boxs:[]
     })
+    this.clarifyApiCaller(this.state.input)
   }
 
   render() {
-
     return (
       <div className="App" style={{ padding: "0 50px" }}>
         <ParticlesBg num={2} color="#ffffff" type="cobWeb" bg={true} />
@@ -150,7 +141,7 @@ export class App extends React.Component {
             inputOnChangeHandler={this.inputOnChangeHandler}
             clickButtonHandler={this.clickButtonHandler}
           />
-          <FaceDetection boxs={this.state.boxs} url={this.state.input} />
+          <FaceDetection boxs={this.state.boxs} url={this.state.imgUrl} />
         </div>
       </div>
     )
