@@ -10,7 +10,7 @@ export const ImageLinkForm = ({inputOnChangeHandler, clickButtonHandler}) => {
       </p>
       <div className="center">
         <div className="center pa4 br3 shadow-5 form ">
-          <input onChange={inputOnChangeHandler} className='f5 pa2 w-70 center'  type="text" />
+          <input id="img-link-form" onChange={inputOnChangeHandler} className='f5 pa2 w-70 center'  type="text" />
           <button onClick={clickButtonHandler} className="w-30 grow f5 link ph3 pv2 dib white bg-light-purple">Detect</button>
         </div>
       </div>

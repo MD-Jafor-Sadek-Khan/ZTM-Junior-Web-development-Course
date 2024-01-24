@@ -6,6 +6,8 @@ import { Rank } from "./components/Rank/Rank"
 import { ImageLinkForm } from "./components/ImageLinkForm/ImageLinkForm"
 import ParticlesBg from "particles-bg"
 import { FaceDetection } from "./components/FaceDetection/FaceDetection"
+import { Login } from "./components/Login/Login"
+import { SignUp } from "./components/SignUp/SignUp.js"
 
 export class App extends React.Component {
   constructor(props) {
@@ -14,6 +16,7 @@ export class App extends React.Component {
       input: "",
       imgUrl: "",
       boxs: [],
+      route: "",
     }
   }
 
@@ -96,6 +99,7 @@ export class App extends React.Component {
 
       return (
         <div
+          key={index}
           className="faceBox"
           style={{
             top: faceBox?.top,
@@ -118,24 +122,67 @@ export class App extends React.Component {
     this.clarifyApiCaller(this.state.input)
   }
 
+  handleLogin = () =>{
+
+    this.setState({route:"loggedin"})
+  }
+
+  handleSignOut= () =>{
+
+    this.setState({route:"signout"})
+  }
+
+  handleSignUp = () =>{
+
+    this.setState({route:"signup"})
+  }
+  handleRegister = () =>{
+
+    this.setState({route:"register"})
+  }
+
   render() {
-    return (
-      <div className="App" style={{ padding: "0 50px" }}>
-        <ParticlesBg num={2} color="#ffffff" type="cobWeb" bg={true} />
-        <div className="flex flex-row-reverse items-start justify-between mt3">
-          <Navigation />
-          <Logo />
+    const { route } = this.state
+    if (route === "login" || route === "" || route==="signout" || route === "register") {
+      return (
+        <div className="App" style={{ padding: "0 50px" }}>
+          <ParticlesBg num={2} color="#ffffff" type="cobWeb" bg={true} />
+          <div className="flex flex-row items-start justify-start tl mt3">
+            <Logo />
+          </div>
+          <Login handleLogin={this.handleLogin} handleSignUp={this.handleSignUp}/>
         </div>
-        <div className="center flex-column">
-          <Rank />
-          <ImageLinkForm
-            inputOnChangeHandler={this.inputOnChangeHandler}
-            clickButtonHandler={this.clickButtonHandler}
-          />
-          <FaceDetection boxs={this.state.boxs} url={this.state.imgUrl} />
+      )
+    } else if (route === "loggedin") {
+      return (
+        <div className="App" style={{ padding: "0 50px" }}>
+          <ParticlesBg num={2} color="#ffffff" type="cobWeb" bg={true} />
+          <div className="flex flex-row-reverse items-start justify-between mt3">
+            <Navigation handleSignOut={this.handleSignOut} />
+            <Logo />
+          </div>
+          <div className="center flex-column">
+            <Rank />
+            <ImageLinkForm
+              inputOnChangeHandler={this.inputOnChangeHandler}
+              clickButtonHandler={this.clickButtonHandler}
+            />
+            <FaceDetection boxs={this.state.boxs} url={this.state.imgUrl} />
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
+    else if (route === "signup") {
+      return (
+        <div className="App" style={{ padding: "0 50px" }}>
+          <ParticlesBg num={2} color="#ffffff" type="cobWeb" bg={true} />
+          <div className="flex flex-row- items-start justify-between mt3">
+            <Logo />
+          </div>
+          <SignUp handleRegister={this.handleRegister}/>
+        </div>
+      )
+    }
   }
 }
 
