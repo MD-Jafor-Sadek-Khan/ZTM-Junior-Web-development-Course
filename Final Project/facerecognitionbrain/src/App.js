@@ -79,17 +79,14 @@ export class App extends React.Component {
         this.setState({ boxs: faceBoxsData })
       })
       .catch((error) => console.log("error", error))
-
-
   }
 
   calculateFaceBoxs = (boxs) => {
     const img = document.getElementById("detection-image")
     const width = Number(img?.width)
     const height = Number(img?.height)
-    const boxsArray = []
 
-    boxs.forEach((box, index) => {
+    const boxsArray = boxs.map((box, index) => {
       const faceBox = {
         top: box?.topRow * height,
         bottom: height - box?.bottomRow * height,
@@ -97,7 +94,7 @@ export class App extends React.Component {
         right: width - box?.rightCol * width,
       }
 
-      boxsArray.push(
+      return (
         <div
           className="faceBox"
           style={{
@@ -105,12 +102,6 @@ export class App extends React.Component {
             bottom: faceBox?.bottom,
             left: faceBox?.left,
             right: faceBox?.right,
-            position: "absolute",
-            boxShadow: "0 0 0 3px #149df2 inset",
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            cursor: "pointer",
           }}
         ></div>
       )
@@ -122,7 +113,7 @@ export class App extends React.Component {
   clickButtonHandler = (event) => {
     this.setState({
       imgUrl: this.state.input,
-      boxs:[]
+      boxs: [],
     })
     this.clarifyApiCaller(this.state.input)
   }
