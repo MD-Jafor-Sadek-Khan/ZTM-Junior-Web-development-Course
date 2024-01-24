@@ -11,8 +11,8 @@ export const Logo = () => {
       <Tilt
         className="shadow-hover br2 shadow-2 center"
         style={{
-          height: "140px",
-          width: "150px",
+          height: "120px",
+          width: "130px",
           background: "transparent",
         }}
         tiltMaxAngleX={55}
@@ -21,15 +21,15 @@ export const Logo = () => {
         tiltReverse={true}
       >
         <div className="child-absolute">
-          <ParticlesBg num={6} color="#ffffff" type="cobweb" bg={true} />
+          <ParticlesBg num={5} color="#ffffff" type="cobweb" bg={true} />
           <div className="center flex-column pa3">
             <img
               className="w3"
-              style={{ paddingTop: "5px", scale: "1.1" }}
+              style={{ paddingTop: "5px", scale: "0.9" }}
               src={logo}
               alt="logo"
             />
-            <p className="b f5 white app-name">FaceSync</p>
+            <span className="b pt1 f5 white app-name">FaceSync</span>
           </div>
         </div>
       </Tilt>

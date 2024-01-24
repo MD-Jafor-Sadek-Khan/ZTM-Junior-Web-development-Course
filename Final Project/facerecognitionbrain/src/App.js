@@ -13,23 +13,26 @@ export class App extends React.Component {
     this.state = {
       input: "",
       imgUrl: "",
-      box: [],
+      boxs: [],
     }
+  }
+
+
+  componentDidMount(){
+
   }
 
   inputOnChangeHandler = (event) => {
     this.setState({ input: event.target.value })
   }
 
-  clarifyApiCaller = async (imageUrl) => {
+  clarifyApiCaller = (imageUrl) => {
     const PAT = "791589e8b409406289142c3eb00dd6a1"
     const USER_ID = "c2dc2bha1jx2"
     const APP_ID = "facerecognitionbrain"
     const MODEL_ID = "face-detection"
     const MODEL_VERSION_ID = "6dc7e46bc9124c5c8824be4822abe105"
     const IMAGE_URL = imageUrl
-
-    const allData = []
 
     const raw = JSON.stringify({
       user_app_id: {
@@ -56,6 +59,8 @@ export class App extends React.Component {
       body: raw,
     }
 
+    const boxsArray = []
+
     fetch(
       "https://api.clarifai.com/v2/models/" +
         MODEL_ID +
@@ -66,39 +71,72 @@ export class App extends React.Component {
     )
       .then((response) => response.json())
       .then((result) => {
-        const regions = result.outputs[0].data.regions;
-      
+        const regions = result.outputs[0].data.regions
         regions.forEach((region) => {
           const boundingBox = region.region_info.bounding_box
           const topRow = boundingBox.top_row.toFixed(3)
           const leftCol = boundingBox.left_col.toFixed(3)
           const bottomRow = boundingBox.bottom_row.toFixed(3)
           const rightCol = boundingBox.right_col.toFixed(3)
-      
+
           const data = { topRow, leftCol, bottomRow, rightCol }
-          
-          this.setState(prevState => ({
-            box: [...prevState.box, data]
-          }), () => {
-            console.log("Updated box state:", this.state.box);
-          });
-        });
+          boxsArray.push(data)
+        })
       })
       .catch((error) => console.log("error", error))
-    return allData
+    return boxsArray
   }
 
-  clickButtonHandler = async (event) => {
-    try {
-      this.setState({ imgUrl: this.state.input })
-      await this.clarifyApiCaller(this.state.input) 
-      console.log(this.state.box);
-    } catch (error) {
-      console.error("Error in API call:", error)
-    }
+
+  calculateFaceBoxs = (boxs) => {
+    const img = document.getElementById("detection-image")
+    const width = Number(img?.width)
+    const height = Number(img?.height)
+    console.log("yoooo",height, width);
+    const boxsArray = []
+
+    boxs.forEach((box, index) => {
+      const faceBox = {
+        top: box?.topRow * height,
+        bottom: height - box?.bottomRow * height,
+        left: box?.leftCol * width,
+        right: width - box?.rightCol * width,
+      }
+
+      boxsArray.push(
+        <div
+          className="faceBox"
+          style={{
+            top: faceBox?.top,
+            bottom: faceBox?.bottom,
+            left: faceBox?.left,
+            right: faceBox?.right,
+            position: "absolute",
+            boxShadow: "0 0 0 3px #149df2 inset",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            cursor: "pointer",
+          }}
+        ></div>
+      )
+    })
+
+    return boxsArray
+  }
+
+  clickButtonHandler = (event) => {
+
+    const newArr = this.clarifyApiCaller(this.state.input)
+
+    this.setState({
+      imgUrl: this.state.input,
+      boxs: this.calculateFaceBoxs(newArr),
+    })
   }
 
   render() {
+
     return (
       <div className="App" style={{ padding: "0 50px" }}>
         <ParticlesBg num={2} color="#ffffff" type="cobWeb" bg={true} />
@@ -112,7 +150,7 @@ export class App extends React.Component {
             inputOnChangeHandler={this.inputOnChangeHandler}
             clickButtonHandler={this.clickButtonHandler}
           />
-          <FaceDetection box={this.state.box} url={this.state.imgUrl} />
+          <FaceDetection boxs={this.state.boxs} url={this.state.input} />
         </div>
       </div>
     )
