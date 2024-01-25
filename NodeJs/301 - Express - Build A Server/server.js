@@ -1,6 +1,12 @@
 import express from "express";
 
 const app = express()
+
+app.use((req,res,next)=>{
+    console.log("I am a MiddleWare");
+    next()
+})
+
 const user = {
     name:"Amina",
     age:99
