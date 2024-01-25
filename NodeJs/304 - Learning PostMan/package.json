@@ -1,12 +1,12 @@
 {
   "name": "304---learning-postman",
   "version": "1.0.0",
-  "type": "module",
+  "type": "commonjs",
   "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon"
+    "start": "nodemon server-RESTful-API.js"
   },
   "keywords": [],
   "author": "",
