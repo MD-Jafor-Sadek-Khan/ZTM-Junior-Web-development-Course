@@ -1,6 +1,6 @@
 // Using bcrypt-nodejs
 
-
+const bcrypt = require("bcrypt-nodejs")
 const express = require("express")
 const bodyParser = require("body-parser")
 
