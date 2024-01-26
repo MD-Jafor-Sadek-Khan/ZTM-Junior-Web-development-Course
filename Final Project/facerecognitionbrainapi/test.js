@@ -49,9 +49,14 @@ bcrypt.hash("bacon", null, null, function (err, hash) {
   })
 })
 
+let rest = false
+bcrypt.compare("bacon", synHash, function(err, res) {
+    rest = res
+});
 
 
 setTimeout(() => {
     const synState = bcrypt.compareSync("bacon", userList[0].password)
-    console.log(synState)
+    console.log("jum",rest)
+    
 }, 0);
