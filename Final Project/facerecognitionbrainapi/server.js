@@ -2,6 +2,8 @@
 const bcrypt = require("bcrypt-nodejs")
 const express = require("express")
 const bodyParser = require("body-parser")
+const cors = require("cors")
+const { count } = require("console")
 
 let idCount = 2
 const dataBase = {
@@ -10,6 +12,7 @@ const dataBase = {
       id: 1,
       name: "Rahat",
       email: "Rahat@gmail.com",
+      password: "1234",
       count: 0,
       registerDate: new Date(),
     },
@@ -17,6 +20,7 @@ const dataBase = {
       id: 2,
       name: "Jafor",
       email: "Jafor@gmail.com",
+      password: "9876",
       count: 0,
       registerDate: new Date(),
     },
@@ -38,6 +42,8 @@ const dataBase = {
 
 const app = express()
 
+app.use(cors())
+
 app.use(bodyParser.json())
 
 //! Get all users
@@ -54,13 +60,21 @@ app.post("/signin", (req, res) => {
   }
 
   // Check if user with given email and password exists
-  const userData = dataBase.login.filter((user) => {
 
+  //   ?for deployment
+  //   const userData = dataBase.login.filter((user) => {
 
-    return user.email === email && bcrypt.compareSync(password, user.password);
+  //     return user.email === email && bcrypt.compareSync(password, user.password);
+  //   })
+
+  // ! ================>
+  // ? for testing
+
+  const userData = dataBase.userList.filter((user) => {
+    return user.email === email && user.password === password
   })
+  // ! ================>
 
-  console.log(userData)
   res.json(userData.length > 0 ? status.success : status.error)
 })
 
@@ -80,16 +94,15 @@ app.post("/register", (req, res) => {
 
   bcrypt.hash(password, null, null, (err, hash) => {
     dataBase.login.push({
-        id:idCount,
-        email:email,
-        password:hash
+      id: idCount,
+      email: email,
+      password: hash,
     })
   })
 
   // Respond with the newly registered user's information
-  setTimeout(() => {
-    res.json(dataBase.userList.at(-1))
-  }, 0);
+
+  res.json(dataBase.userList[dataBase.userList.length - 1])
 })
 
 //! Get user profile by ID
@@ -112,19 +125,15 @@ app.get("/profile/:id", (req, res) => {
 //! Update user image API request count
 app.put("/image", (req, res) => {
   const { id } = req.body
-  let flag = false
-
   // Find user by ID and update the image count
+  let flagCount = 0
   dataBase.userList.forEach((user) => {
     if (user.id == id) {
-      flag = true
-      user.count++
+      user.count += 1
+      flagCount = user.count
     }
   })
-
-  // Respond with "Not found" if user not found, otherwise "Success!!!"
-  if (!flag) res.json("Not found")
-  res.json("Success!!!")
+  res.json(flagCount)
 })
 
 //! Start the server on port 3005

@@ -17,7 +17,47 @@ export class App extends React.Component {
       imgUrl: "",
       boxs: [],
       route: "",
+      user: {
+        id: "",
+        name: "",
+        email: "",
+        count: "",
+        registerDate: "",
+      },
     }
+  }
+
+  updateUser = (user) => {
+    this.setState({
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        count: user.count,
+        registerDate: user.registerDate,
+      },
+    })
+  }
+
+  handleImageSubmitCount = () => {
+    fetch("http://localhost:3005/image", {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: this.state.user.id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((reciveCount) => {
+        this.setState((prev) => {
+          const prevUser = { ...prev.user }
+          const newUser = Object.defineProperty(prevUser, "count", {
+            value: reciveCount,
+          })
+          return {user:newUser}
+        })
+        this.clickButtonHandler()
+      })
   }
 
   inputOnChangeHandler = (event) => {
@@ -122,48 +162,56 @@ export class App extends React.Component {
     this.clarifyApiCaller(this.state.input)
   }
 
-  handleLogin = () =>{
-
-    this.setState({route:"loggedin"})
+  handleLogin = () => {
+    this.setState({ route: "loggedin" })
   }
 
-  handleSignOut= () =>{
-
-    this.setState({route:"signout"})
+  handleSignOut = () => {
+    this.setState({ route: "signout" })
   }
 
-  handleSignUp = () =>{
-
-    this.setState({route:"signup"})
+  handleSignUp = () => {
+    this.setState({ route: "signup" })
   }
-  handleRegister = () =>{
-
-    this.setState({route:"register"})
+  handleRegister = () => {
+    this.setState({ route: "loggedin" })
   }
 
   render() {
+
     const { route } = this.state
-    if (route === "login" || route === "" || route==="signout" || route === "register") {
+    if (route === "login" || route === "" || route === "signout") {
       return (
         <div className="App" style={{ padding: "0 50px" }}>
           <ParticlesBg num={2} color="#ffffff" type="cobWeb" bg={true} />
           <div className="flex flex-row items-start justify-start tl mt3">
             <Logo />
           </div>
-          <Login handleLogin={this.handleLogin} handleSignUp={this.handleSignUp}/>
+          <Login
+            handleLogin={this.handleLogin}
+            handleSignUp={this.handleSignUp}
+          />
         </div>
       )
     } else if (route === "loggedin") {
       return (
         <div className="App" style={{ padding: "0 50px" }}>
-          <ParticlesBg num={2} color="#ffffff" type="cobWeb" bg={true} />
+          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
+          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
+          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
+          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
+          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
+          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
+          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
+          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
           <div className="flex flex-row-reverse items-start justify-between mt3">
             <Navigation handleSignOut={this.handleSignOut} />
             <Logo />
           </div>
           <div className="center flex-column">
-            <Rank />
+            <Rank user={this.state.user} />
             <ImageLinkForm
+              handleImageSubmitCount={this.handleImageSubmitCount}
               inputOnChangeHandler={this.inputOnChangeHandler}
               clickButtonHandler={this.clickButtonHandler}
             />
@@ -171,15 +219,17 @@ export class App extends React.Component {
           </div>
         </div>
       )
-    }
-    else if (route === "signup") {
+    } else if (route === "signup") {
       return (
         <div className="App" style={{ padding: "0 50px" }}>
           <ParticlesBg num={2} color="#ffffff" type="cobWeb" bg={true} />
           <div className="flex flex-row- items-start justify-between mt3">
             <Logo />
           </div>
-          <SignUp handleRegister={this.handleRegister}/>
+          <SignUp
+            updateUser={this.updateUser}
+            handleRegister={this.handleRegister}
+          />
         </div>
       )
     }
