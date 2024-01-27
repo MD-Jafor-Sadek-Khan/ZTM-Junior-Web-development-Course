@@ -6,55 +6,16 @@ const cors = require("cors")
 const { count } = require("console")
 const knex = require("knex")
 
-const postgres = knex({
-  client: 'pg',
+const db = knex({
+  client: "pg",
   connection: {
-    host : '127.0.0.1',
-    port : 5432,
-    user : 'postgres',
-    password : '1964',
-    database : 'smart-brain'
-  }
-});
-
-postgres.select('*')
-.from('users').then(console.log)
-
-let idCount = 2
-const dataBase = {
-  userList: [
-    {
-      id: 1,
-      name: "Rahat",
-      email: "Rahat@gmail.com",
-      password: "1234",
-      count: 0,
-      registerDate: new Date(),
-    },
-    {
-      id: 2,
-      name: "Jafor",
-      email: "Jafor@gmail.com",
-      password: "9876",
-      count: 0,
-      registerDate: new Date(),
-    },
-  ],
-
-  login: [
-    {
-      id: 1,
-      email: "Rahat@gmail.com",
-      password: "",
-    },
-    {
-      id: 2,
-      email: "Jafor@gmail.com",
-      password: "",
-    },
-  ],
-}
-
+    host: "127.0.0.1",
+    port: 5432,
+    user: "postgres",
+    password: "1964",
+    database: "smart-brain",
+  },
+})
 
 
 const app = express()
@@ -71,55 +32,56 @@ app.get("/", (req, res) => {
 //! User sign-in
 app.post("/signin", (req, res) => {
   const { email, password } = req.body
-  const status = {
-    success: "Success!",
-    error: "Error",
-  }
+    // Check if user with given email and password exists
 
-  // Check if user with given email and password exists
+  db('login').where({
+    email:email
+  }).select('*')
+  .then(user => {
+    const validate = bcrypt.compareSync(password, user[0].password)
+    if(validate)
+    {
+     return db("users").where({
+        email: user[0].email
+      }).select("*")
+      .then(user => res.json(user[0]))
+    }
+  }).catch(err => console.log(err))
 
-  //   ?for deployment
-  //   const userData = dataBase.login.filter((user) => {
-
-  //     return user.email === email && bcrypt.compareSync(password, user.password);
-  //   })
- 
-  // ! ================>
-  // ? for testing
-
-  const userData = dataBase.userList.filter((user) => {
-    return user.email === email && user.password === password
-  })
-  // ! ================>
-
-  res.json(userData.length > 0 ? status.success : status.error)
 })
 
 //! User registration
 app.post("/register", (req, res) => {
-  idCount++
   const { name, email, password } = req.body
-
+  const hash = bcrypt.hashSync(password);
   // Add a new user to the user list
-  dataBase.userList.push({
-    id: idCount,
-    name: name,
-    email: email,
-    count: 0,
-    registerDate: new Date(),
-  })
 
-  bcrypt.hash(password, null, null, (err, hash) => {
-    dataBase.login.push({
-      id: idCount,
+  db.transaction(trx =>{
+    trx('login').insert({
       email: email,
-      password: hash,
+      password: hash
     })
+    .returning("email")
+    .then(loginEmail =>{
+      trx("users")
+      .returning("*")
+      .insert({
+        name: name,
+        email: loginEmail[0].email,
+        registerdate: new Date(),
+      })
+      .then((user) => {
+        res.json(user[0])
+      })      
+    })
+    .then(trx.commit)
+    .catch(trx.rollback)
+
   })
+  .catch((err) => res.status(400).json("Unable To Register"))
+
 
   // Respond with the newly registered user's information
-
-  res.json(dataBase.userList[dataBase.userList.length - 1])
 })
 
 //! Get user profile by ID
@@ -127,30 +89,30 @@ app.get("/profile/:id", (req, res) => {
   const { id } = req.params
 
   // Find user by ID
-  const userData = dataBase.userList.filter((user) => {
-    return user.id == id
-  })
+  db('users').where({
+    id:id
+  }).select('*').then(user =>{
+    if(user.length > 0 ){
+      res.json(user[0])
+    }else{
 
-  // Respond with user information if found, otherwise "Not Found"
-  if (userData.length > 0) {
-    res.json(userData)
-  } else {
-    res.json("Not Found")
-  }
+      res.status(400).json("No Users Found")
+    }
+  })
+  .catch(err => res.status(400).json("Error finding User!!!"))
+
 })
 
 //! Update user image API request count
 app.put("/image", (req, res) => {
   const { id } = req.body
   // Find user by ID and update the image count
-  let flagCount = 0
-  dataBase.userList.forEach((user) => {
-    if (user.id == id) {
-      user.count += 1
-      flagCount = user.count
-    }
-  })
-  res.json(flagCount)
+  db('users')
+  .where('id', '=', id)
+  .returning('count')
+  .increment('count', 1)
+  .then(count => res.json(Number(count[0].count)))
+  .catch(err => res.status(400).json("Error!!!"))
 })
 
 //! Start the server on port 3005

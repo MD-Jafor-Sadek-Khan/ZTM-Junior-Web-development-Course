@@ -30,26 +30,24 @@ export class SignUp extends React.Component {
     })
   }
 
-
   submitServerRegister() {
-    fetch("http://localhost:3005/register",{
-      method:"post",
-      headers:{"Content-Type": "application/json"},
-      body:JSON.stringify({
-        name:this.state.registerName,
-        email:this.state.userEmail,
-        password:this.state.userPassword
-      })
+    fetch("http://localhost:3005/register", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: this.state.registerName,
+        email: this.state.registerEmail,
+        password: this.state.registerPassword,
+      }),
     })
-    .then(res => res.json())
-    .then(user => {
-      this.props.updateUser(user)
-      this.props.handleRegister()
-    })
+      .then((res) => res.json())
+      .then((user) => {
+        this.props.updateUser(user)
+        this.props.handleRegister()
+      }).catch(err => console.log("error",err))
   }
 
   render() {
-
     return (
       <article className="pa4 br4 black-80 flex center shadow-5 mt5  w-90-m w-50-l flex-column">
         <h2 className="ph3 pv1 br4 ma0 bg-black-90 white fw1">Signup</h2>
@@ -113,7 +111,7 @@ export class SignUp extends React.Component {
               className="b br4 ph3 bg-black-90 pv2 input-reset ba b--black white grow pointer f6"
               type="submit"
               value="Register"
-              onClick={()=> this.submitServerRegister()}
+              onClick={() => this.submitServerRegister()}
             />
           </div>
         </div>

@@ -28,6 +28,7 @@ export class App extends React.Component {
   }
 
   updateUser = (user) => {
+    console.log(user);
     this.setState({
       user: {
         id: user.id,
@@ -190,20 +191,14 @@ export class App extends React.Component {
           <Login
             handleLogin={this.handleLogin}
             handleSignUp={this.handleSignUp}
+            updateUser={this.updateUser}
           />
         </div>
       )
     } else if (route === "loggedin") {
       return (
         <div className="App" style={{ padding: "0 50px" }}>
-          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
-          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
-          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
-          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
-          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
-          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
-          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
-          <ParticlesBg num={20} color="#ffffff" type="cobWeb" bg={true} />
+          <ParticlesBg num={2} color="#ffffff" type="cobWeb" bg={true} />
           <div className="flex flex-row-reverse items-start justify-between mt3">
             <Navigation handleSignOut={this.handleSignOut} />
             <Logo />

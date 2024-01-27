@@ -34,7 +34,8 @@ export class Login extends React.Component {
     })
     .then(res => res.json())
     .then(data => {
-      if(data === "Success!"){
+      if(data.id){
+        this.props.updateUser(data)
         this.props.handleLogin()
       }
       else{
