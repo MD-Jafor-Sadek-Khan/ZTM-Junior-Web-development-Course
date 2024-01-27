@@ -4,6 +4,21 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const cors = require("cors")
 const { count } = require("console")
+const knex = require("knex")
+
+const postgres = knex({
+  client: 'pg',
+  connection: {
+    host : '127.0.0.1',
+    port : 5432,
+    user : 'postgres',
+    password : '1964',
+    database : 'smart-brain'
+  }
+});
+
+postgres.select('*')
+.from('users').then(console.log)
 
 let idCount = 2
 const dataBase = {
@@ -40,6 +55,8 @@ const dataBase = {
   ],
 }
 
+
+
 const app = express()
 
 app.use(cors())
@@ -66,7 +83,7 @@ app.post("/signin", (req, res) => {
 
   //     return user.email === email && bcrypt.compareSync(password, user.password);
   //   })
-//  
+ 
   // ! ================>
   // ? for testing
 
