@@ -1,10 +1,12 @@
+import ParticlesBg from "particles-bg"
 import "./App.css"
 import React from "react"
+
+// Components
 import { Navigation } from "./components/Navigation/Navigation"
 import { Logo } from "./components/Logo/Logo"
 import { Rank } from "./components/Rank/Rank"
 import { ImageLinkForm } from "./components/ImageLinkForm/ImageLinkForm"
-import ParticlesBg from "particles-bg"
 import { FaceDetection } from "./components/FaceDetection/FaceDetection"
 import { Login } from "./components/Login/Login"
 import { SignUp } from "./components/SignUp/SignUp.js"
