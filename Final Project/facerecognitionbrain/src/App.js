@@ -28,8 +28,9 @@ export class App extends React.Component {
   }
 
   updateUser = (user) => {
-    console.log(user);
     this.setState({
+      imgUrl:"",
+      boxs:[],
       user: {
         id: user.id,
         name: user.name,
