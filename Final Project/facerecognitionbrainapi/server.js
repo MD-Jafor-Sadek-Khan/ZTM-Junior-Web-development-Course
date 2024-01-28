@@ -1,14 +1,18 @@
-const bcrypt = require("bcrypt-nodejs")
+// Packeges Import
 const express = require("express")
-const bodyParser = require("body-parser")
 const cors = require("cors")
-const { count } = require("console")
 const knex = require("knex")
+const bcrypt = require("bcrypt-nodejs")
+const bodyParser = require("body-parser")
+
+// Controllers Import
 const register = require("./controllers/register")
 const signin = require("./controllers/signin")
 const profile = require("./controllers/profile")
 const image = require("./controllers/image")
 
+
+// Packeges
 const db = knex({
   client: "pg",
   connection: {
@@ -19,25 +23,17 @@ const db = knex({
     database: "smart-brain",
   },
 })
-
 const app = express()
-
 app.use(cors())
-
 app.use(bodyParser.json())
 
-app.get("/", (req, res) => {
-  res.json(dataBase.userList)
-})
-
+// Routes
 app.post("/signin", signin.handleSignin(db, bcrypt))
-
 app.post("/register", register.handleRegister(db, bcrypt))
-
 app.get("/profile/:id", profile.handleProfileGet(db))
-
 app.put("/image", image.handleImage(db))
 
+// Server Port
 app.listen(3005, () => {
   console.log("server started at localhost:3005")
 })
