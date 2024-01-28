@@ -109,7 +109,10 @@ export class App extends React.Component {
     return boxsArray
   }
 
-  handleImageSubmitCount = () => {
+
+
+  handleImageSubmitCount = (image) => {
+    
     fetch("http://localhost:3005/image", {
       method: "put",
       headers: { "Content-Type": "application/json" },
@@ -131,6 +134,9 @@ export class App extends React.Component {
   }
 
   render() {
+        
+   
+    
     const { route } = this.state
     if (route === "login" || route === "" || route === "signout") {
       return (
