@@ -31,6 +31,7 @@ export class App extends React.Component {
     this.setState({
       imgUrl:"",
       boxs:[],
+      input:"",
       user: {
         id: user.id,
         name: user.name,
