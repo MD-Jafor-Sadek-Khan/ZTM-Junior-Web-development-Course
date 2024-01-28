@@ -1,5 +1,9 @@
 const handleRegister = (db, bcrypt) =>(req, res ) => {
     const { name, email, password } = req.body
+    if(!name || !email || !password){
+        return res.status(400).json("Unable to Register")
+    }
+
     const hash = bcrypt.hashSync(password);
     // Add a new user to the user list
   

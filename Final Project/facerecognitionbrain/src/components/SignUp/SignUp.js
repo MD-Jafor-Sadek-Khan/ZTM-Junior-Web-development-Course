@@ -42,8 +42,11 @@ export class SignUp extends React.Component {
     })
       .then((res) => res.json())
       .then((user) => {
-        this.props.updateUser(user)
-        this.props.handleRout("loggedin")
+        if(user.id){
+
+          this.props.updateUser(user)
+          this.props.handleRout("loggedin")
+        }
       })
       .catch((err) => console.log("error", err))
   }
