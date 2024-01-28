@@ -1,3 +1,5 @@
+// Migrating Clarify API Call to Backend server for Security
+
 // Packeges
 import ParticlesBg from "particles-bg"
 import React from "react"
@@ -117,6 +119,10 @@ export class App extends React.Component {
           const data = { topRow, leftCol, bottomRow, rightCol }
           return data
         })
+
+        return boxsArray
+      })
+      .then(boxsArray => {
         const faceBoxsData = this.calculateFaceBoxs(boxsArray)
         this.setState({ boxs: faceBoxsData })
       })
