@@ -24,30 +24,23 @@ export class Login extends React.Component {
   }
 
   submitServerLogin() {
-    fetch("http://localhost:3005/signin",{
-      method:"post",
-      headers:{"Content-Type": "application/json"},
-      body:JSON.stringify({
-        email:this.state.userEmail,
-        password:this.state.userPassword
+    fetch("http://localhost:3005/signin", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: this.state.userEmail,
+        password: this.state.userPassword,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.id) {
+          this.props.updateUser(data)
+          this.props.handleRout("loggedin")
+        }
       })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if(data.id){
-        this.props.updateUser(data)
-        this.props.handleLogin()
-      }
-      else{
-        // ! Add login faliur message 
-        // ? Here
-        console.log("2");
-      }
-    })
+      .catch(console.log)
   }
-
-
-  
 
   render() {
     return (
@@ -74,7 +67,7 @@ export class Login extends React.Component {
                 type="email"
                 name="Lognin-form-email-address"
                 id="Lognin-form-email-address"
-                onChange={(event)=>this.setUserEmail(event)}
+                onChange={(event) => this.setUserEmail(event)}
               />
             </div>
             <div className="mt3">
@@ -89,7 +82,7 @@ export class Login extends React.Component {
                 type="password"
                 name="Lognin-form-password"
                 id="Lognin-form-password"
-                onChange={(event)=>this.setUserPassword(event)}
+                onChange={(event) => this.setUserPassword(event)}
               />
             </div>
           </fieldset>
@@ -104,7 +97,7 @@ export class Login extends React.Component {
               className="b br4 ph3 bg-black-90 pv2 input-reset ba b--black white grow pointer f6"
               type="submit"
               value="Signup"
-              onClick={()=>this.props.handleSignUp()}
+              onClick={() => this.props.handleRout("signup")}
             />
           </div>
         </div>

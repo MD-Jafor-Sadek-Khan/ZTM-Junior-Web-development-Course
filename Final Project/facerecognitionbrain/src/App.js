@@ -1,6 +1,9 @@
+// Packeges
 import ParticlesBg from "particles-bg"
-import "./App.css"
 import React from "react"
+
+// StyleSheet
+import "./App.css"
 
 // Components
 import { Navigation } from "./components/Navigation/Navigation"
@@ -31,9 +34,9 @@ export class App extends React.Component {
 
   updateUser = (user) => {
     this.setState({
-      imgUrl:"",
-      boxs:[],
-      input:"",
+      imgUrl: "",
+      boxs: [],
+      input: "",
       user: {
         id: user.id,
         name: user.name,
@@ -44,29 +47,20 @@ export class App extends React.Component {
     })
   }
 
-  handleImageSubmitCount = () => {
-    fetch("http://localhost:3005/image", {
-      method: "put",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: this.state.user.id,
-      }),
-    })
-      .then((res) => res.json())
-      .then((reciveCount) => {
-        this.setState((prev) => {
-          const prevUser = { ...prev.user }
-          const newUser = Object.defineProperty(prevUser, "count", {
-            value: reciveCount,
-          })
-          return {user:newUser}
-        })
-        this.clickButtonHandler()
-      })
+  handleRout = (route) => {
+    this.setState({ route: route })
   }
 
   inputOnChangeHandler = (event) => {
     this.setState({ input: event.target.value })
+  }
+
+  clickButtonHandler = () => {
+    this.setState({
+      imgUrl: this.state.input,
+      boxs: [],
+    })
+    this.clarifyApiCaller(this.state.input)
   }
 
   clarifyApiCaller = (imageUrl) => {
@@ -159,31 +153,30 @@ export class App extends React.Component {
     return boxsArray
   }
 
-  clickButtonHandler = (event) => {
-    this.setState({
-      imgUrl: this.state.input,
-      boxs: [],
+
+  handleImageSubmitCount = () => {
+    fetch("http://localhost:3005/image", {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: this.state.user.id,
+      }),
     })
-    this.clarifyApiCaller(this.state.input)
+      .then((res) => res.json())
+      .then((reciveCount) => {
+        this.setState((prev) => {
+          const prevUser = { ...prev.user }
+          const newUser = Object.defineProperty(prevUser, "count", {
+            value: reciveCount,
+          })
+          return { user: newUser }
+        })
+        this.clickButtonHandler()
+      })
   }
 
-  handleLogin = () => {
-    this.setState({ route: "loggedin" })
-  }
-
-  handleSignOut = () => {
-    this.setState({ route: "signout" })
-  }
-
-  handleSignUp = () => {
-    this.setState({ route: "signup" })
-  }
-  handleRegister = () => {
-    this.setState({ route: "loggedin" })
-  }
 
   render() {
-
     const { route } = this.state
     if (route === "login" || route === "" || route === "signout") {
       return (
@@ -192,11 +185,7 @@ export class App extends React.Component {
           <div className="flex flex-row items-start justify-start tl mt3">
             <Logo />
           </div>
-          <Login
-            handleLogin={this.handleLogin}
-            handleSignUp={this.handleSignUp}
-            updateUser={this.updateUser}
-          />
+          <Login updateUser={this.updateUser} handleRout={this.handleRout} />
         </div>
       )
     } else if (route === "loggedin") {
@@ -204,7 +193,7 @@ export class App extends React.Component {
         <div className="App" style={{ padding: "0 50px" }}>
           <ParticlesBg num={2} color="#ffffff" type="cobWeb" bg={true} />
           <div className="flex flex-row-reverse items-start justify-between mt3">
-            <Navigation handleSignOut={this.handleSignOut} />
+            <Navigation handleRout={this.handleRout} />
             <Logo />
           </div>
           <div className="center flex-column">
@@ -225,10 +214,7 @@ export class App extends React.Component {
           <div className="flex flex-row- items-start justify-between mt3">
             <Logo />
           </div>
-          <SignUp
-            updateUser={this.updateUser}
-            handleRegister={this.handleRegister}
-          />
+          <SignUp updateUser={this.updateUser} handleRout={this.handleRout} />
         </div>
       )
     }

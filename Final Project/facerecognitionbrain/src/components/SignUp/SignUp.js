@@ -43,8 +43,9 @@ export class SignUp extends React.Component {
       .then((res) => res.json())
       .then((user) => {
         this.props.updateUser(user)
-        this.props.handleRegister()
-      }).catch(err => console.log("error",err))
+        this.props.handleRout("loggedin")
+      })
+      .catch((err) => console.log("error", err))
   }
 
   render() {
@@ -113,6 +114,12 @@ export class SignUp extends React.Component {
               value="Register"
               onClick={() => this.submitServerRegister()}
             />
+            <button
+              className="b br4 ph3 bg-black-90 pv2 input-reset ba b--black white grow pointer f6"
+              onClick={() => this.props.handleRout("")}
+            >
+              Login
+            </button>
           </div>
         </div>
       </article>
