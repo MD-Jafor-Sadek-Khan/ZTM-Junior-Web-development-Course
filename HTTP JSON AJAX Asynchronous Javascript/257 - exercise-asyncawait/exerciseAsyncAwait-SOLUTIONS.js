@@ -1,4 +1,6 @@
 // Solve the below problems:
+// Exercise
+
 
 // #1) Convert the below promise into async await
 fetch("https://jsonplaceholder.typicode.com/users")
